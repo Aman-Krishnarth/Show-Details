@@ -1,37 +1,84 @@
-import React from 'react'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-    return (
-      <div className="min-h-screen bg-black text-white flex justify-center items-center">
-        <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-lg">
-          <h2 className="text-3xl font-semibold text-center mb-4">Login</h2>
-          <form className="space-y-4">
-            <div>
-              <label className="block font-medium">Email</label>
-              <input
-                type="email"
-                placeholder="Email"
-                className="w-full border p-2 rounded bg-black text-white"
-              />
-            </div>
-            <div>
-              <label className="block font-medium">Password</label>
-              <input
-                type="password"
-                placeholder="Password"
-                className="w-full border p-2 rounded bg-black text-white"
-              />
-            </div>
-            <button className="w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700">
-              Login
-            </button>
-          </form>
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-center mb-4">User Data</h2>
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    // Call the function to handle login details (e.g., for API request)
+    handleLoginDetails(email, password);
+  };
+
+  const handleLoginDetails = async (email, password) => {
+    // You can now use these details to make the axios API call or do any other logic
+    console.log("Email:", email);
+    console.log("Password:", password);
+
+    // Further axios work can be done here...
+
+    const result = await axios.post("http://localhost:8000/api/v1/user/login", {
+      email,
+      password,
+    });
+    console.log("skjldfds");
+    console.log(result);
+
+    alert(result.data.message);
+
+    if (result.data.status) {
+      localStorage.setItem("isLoggedIn", true);
+      navigate("/home");
+    }
+  };
+
+  useEffect(() => {
+    const checkLoggedIn = localStorage.getItem("isLoggedIn");
+    if (checkLoggedIn) {
+      navigate("/home");
+    }
+  });
+
+  return (
+    <div className="min-h-screen bg-black text-white flex justify-center items-center">
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-lg">
+        <h2 className="text-3xl font-semibold text-center mb-4">Login</h2>
+        <form className="space-y-4" onSubmit={handleLogin}>
+          <div>
+            <label className="block font-medium">Email</label>
+            <input
+              type="email"
+              placeholder="Email"
+              className="w-full border p-2 rounded bg-black text-white"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)} // Capture email input
+            />
           </div>
+          <div>
+            <label className="block font-medium">Password</label>
+            <input
+              type="password"
+              placeholder="Password"
+              className="w-full border p-2 rounded bg-black text-white"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)} // Capture password input
+            />
+          </div>
+          <button className="w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700">
+            Login
+          </button>
+        </form>
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold text-center mb-4">User Data</h2>
         </div>
       </div>
-    );
-  };
-  
-  export default Login;
+    </div>
+  );
+};
+
+export default Login;
