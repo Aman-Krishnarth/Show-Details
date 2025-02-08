@@ -11,23 +11,17 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    // Call the function to handle login details (e.g., for API request)
     handleLoginDetails(email, password);
   };
 
   const handleLoginDetails = async (email, password) => {
-    // You can now use these details to make the axios API call or do any other logic
-    console.log("Email:", email);
-    console.log("Password:", password);
-
-    // Further axios work can be done here...
-
-    const result = await axios.post("http://localhost:8000/api/v1/user/login", {
-      email,
-      password,
-    });
-    console.log("skjldfds");
-    console.log(result);
+    const result = await axios.post(
+      "https://get-details-h1mu.onrender.com/api/v1/user/login",
+      {
+        email,
+        password,
+      }
+    );
 
     alert(result.data.message);
 
